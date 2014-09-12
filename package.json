@@ -34,6 +34,10 @@
     "test": "gulp lint"
   },
   "dependencies": {
-    "debounce": "~1.0.0"
+    "debounce": "~1.0.0",
+    "observ": "~0.2.0",
+    "observ-struct": "~5.0.1",
+    "observ-array": "~2.0.0",
+    "interact-js": "~2.0.1"
   }
 }

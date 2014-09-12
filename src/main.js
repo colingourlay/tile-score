@@ -1,55 +1,141 @@
-/* global canvas */
+// var Observ = require('observ');
+// var ObservStruct = require('observ-struct');
+// var ObservArray = require('observ-array');
+var interact = require('interact-js');
 
 var raf = require('./raf');
-var rng = require('./rng');
+// var rng = require('./rng');
 var autoscale = require('./autoscale');
 
-var ctx = canvas.getContext('2d');
+var TILE_SIZE = 80;
+var FIELD_SIZE = 8;
+var NUM_TILES = FIELD_SIZE * FIELD_SIZE;
+var NUM_TILE_TYPES = 4;
+var DIRECTIONS = {
+  LEFT: 0,
+  RIGHT: 1,
+  UP: 2,
+  DOWN: 3,
+  ALL: 4
+};
 
-var rand = rng();
+var tiles = new Array(NUM_TILES);
+var $tiles = new Array(NUM_TILES);
+var $grid = document.querySelector('.Game-grid');
 
-var balls = [];
-var colors = [
-  '#7FDBFF', '#0074D9', '#01FF70', '#001F3F', '#39CCCC',
-  '#3D9970', '#2ECC40', '#FF4136', '#85144B', '#FF851B',
-  '#B10DC9', '#FFDC00', '#F012BE',
-];
-
-for (var i = 0; i < 50; i++) {
-  balls.push({
-    x: rand.int(canvas.width),
-    y: rand.int(canvas.height / 2),
-    radius: rand.range(15, 35),
-    dx: rand.range(-100, 100),
-    dy: 0,
-    color: rand.pick(colors)
-  });
+function rowNumber(i) {
+  return Math.floor(i / FIELD_SIZE);
 }
 
-raf.start(function(elapsed) {
-  // Clear the screen
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+function colNumber(i) {
+  return i % FIELD_SIZE;
+}
 
-  // Update each balls
-  balls.forEach(function(ball) {
-    // Gravity
-    ball.dy += elapsed * 1500;
+function isHorizontalMatch(i) {
+  return colNumber(i) >= 2 &&
+    tiles[i] === tiles[i - 1] &&
+    tiles[i] === tiles[i - 2] &&
+    rowNumber(i) === rowNumber(i - 2);
+}
 
-    // Handle collision against the canvas's edges
-    if (ball.x - ball.radius < 0 && ball.dx < 0 || ball.x + ball.radius > canvas.width && ball.dx > 0) ball.dx = -ball.dx * 0.7;
-    if (ball.y - ball.radius < 0 && ball.dy < 0 || ball.y + ball.radius > canvas.height && ball.dy > 0) ball.dy = -ball.dy * 0.7;
+function isVerticalMatch(i) {
+  return rowNumber(i) >= 2 &&
+    tiles[i] === tiles[i - FIELD_SIZE] &&
+    tiles[i] === tiles[i - 2 * FIELD_SIZE];
+}
 
-    // Update ball position
-    ball.x += ball.dx * elapsed;
-    ball.y += ball.dy * elapsed;
+function swap(a, b) {
+  var temp = tiles[a];
+  tiles[a] = tiles[b];
+  tiles[b] = temp;
+}
 
-    // Render the ball
-    ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, true);
-    ctx.closePath();
-    ctx.fillStyle = ball.color;
-    ctx.fill();
-  });
+function onDrag(interaction) {
+  var delta = interaction.getMoveDelta();
+  var index, row, col, direction;
+
+  if (interaction.isResolved) {
+    return;
+  }
+
+  if (interaction.sourceIndex == null) {
+    // interaction.sourceIndex = Array.prototype.indexOf.call(interaction.target.parentNode.childNodes, interaction.target);
+    interaction.sourceIndex = $tiles.indexOf(interaction.target);
+    console.log(interaction.sourceIndex);
+  }
+
+  if (!interaction.totals) {
+    interaction.totals = {x: 0, y: 0, d: 0};
+  }
+
+  interaction.totals.x += delta.x;
+  interaction.totals.y += delta.y;
+  interaction.totals.d = Math.max(Math.abs(interaction.totals.x), Math.abs(interaction.totals.y));
+
+  if (interaction.totals.d < (TILE_SIZE / 8)) {
+    return;
+  }
+
+  if (Math.abs(interaction.totals.x) > Math.abs(interaction.totals.y)) {
+    direction = DIRECTIONS[interaction.totals.x < 0 ? 'LEFT' : 'RIGHT'];
+  } else {
+    direction = DIRECTIONS[interaction.totals.y < 0 ? 'UP' : 'DOWN'];
+  }
+
+  interaction.isResolved = true;
+  index = interaction.sourceIndex;
+  row = rowNumber(index);
+  col = colNumber(index);
+
+  switch (direction) {
+    case DIRECTIONS.UP:
+      if (row > 0) {
+        console.log('up');
+        swap(index, index - 8);
+      }
+      break;
+    case DIRECTIONS.DOWN:
+      if (row < (FIELD_SIZE - 1)) {
+        console.log('down');
+        swap(index, index + 8);
+      }
+      break;
+    case DIRECTIONS.LEFT:
+      if (col > 0) {
+        console.log('left');
+        swap(index, index - 1);
+      }
+      break;
+    case DIRECTIONS.RIGHT:
+      if (col < (FIELD_SIZE - 1)) {
+        console.log('right');
+        swap(index, index + 1);
+      }
+      break;
+    default:
+      break;
+  }
+}
+
+for (var i = 0; i < NUM_TILES; i++) {
+  do {
+    tiles[i] = Math.ceil(Math.random() * NUM_TILE_TYPES);
+    if (!$tiles[i]) {
+      $tiles[i] = document.createElement('div');
+      // $tiles[i].data.index = i;
+      $tiles[i].className = 'Game-tile Game-tile--type' + tiles[i];
+      $tiles[i].style.transform = 'translate(' + (colNumber(i) * TILE_SIZE)  + 'px,' + (rowNumber(i) * TILE_SIZE) + 'px)';
+      $grid.appendChild($tiles[i]);
+    }
+  } while (isHorizontalMatch(i) || isVerticalMatch(i));
+}
+
+interact.on('drag', $grid, onDrag);
+
+raf.start(function () {
+  for (var i = 0; i < NUM_TILES; i++) {
+      $tiles[i].className = $tiles[i].className.replace(/(--type)\d/, '$1' + tiles[i]);
+  }
 });
 
 autoscale('.Game', 640, 880);
