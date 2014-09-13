@@ -5,10 +5,10 @@ var autoscale = require('./autoscale');
 var raf = require('./raf');
 var Grid = require('./Grid');
 
-var FIELD_SIZE = 640;
-var FIELD_TILES = 6;
-var MENU_HEIGHT = 80;
-var STATS_HEIGHT = 160;
+var FIELD_SIZE = 720;
+var FIELD_TILES = 8;
+var MENU_HEIGHT = 90;
+var STATS_HEIGHT = 180;
 var GAME_WIDTH = FIELD_SIZE;
 var GAME_HEIGHT = FIELD_SIZE + MENU_HEIGHT + STATS_HEIGHT;
 

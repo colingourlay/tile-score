@@ -48,7 +48,7 @@ Tile.prototype.updateScore = function () {
 
 Tile.prototype.updateAppearance = function () {
   var tileSize = this.grid.tileSize;
-  var borderSize = tileSize / 40;
+  var borderSize = Math.ceil(tileSize / 45);
   var borderSizePx = borderSize + 'px';
   var index = this.grid.tiles.indexOf(this);
   var row = this.grid.rowOf(this);
@@ -60,7 +60,7 @@ Tile.prototype.updateAppearance = function () {
     'Game-tile--type' + this.type
   ].join(' ');
 
-  this.$el.setAttribute('data-score', this.score);
+  this.$el.innerHTML = this.score;
 
   this.$el.style.borderTopWidth = row === 0 || this.scoring.top < 0 ? borderSizePx : 0;
   this.$el.style.borderRightWidth = col === last || this.scoring.right < 0 ? borderSizePx : 0;
@@ -73,8 +73,10 @@ Tile.prototype.updateAppearance = function () {
   this.$el.style.borderTopLeftRadius = 'inherit';
 
   if (row !== 0 && this.type === this.grid.tiles[index - this.grid.fieldTiles].type) {
-   this.$el.style.borderTopLeftRadius = 0;
+    this.$el.style.borderTopLeftRadius = 0;
     this.$el.style.borderTopRightRadius = 0;
+    // this.$el.style.backgroundImage = 'radial-gradient(circle 20px at -20% 50%,transparent,transparent 100px,#888888 100px)';
+    this.$el.style.backgroundImage = 'radial-gradient(circle 20px at -20% 50%,transparent,transparent 100px,#888888 100px)';
   }
 
   if (col !== 0 && this.type === this.grid.tiles[index - 1].type) {

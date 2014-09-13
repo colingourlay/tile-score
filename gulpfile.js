@@ -37,8 +37,9 @@ program
 
 var prod = !!program.prod;
 
-gulp.task('default', ['build']);
 gulp.task('build', ['build_source', 'build_index', 'build_styles']);
+gulp.task('dev', ['build', 'watch', 'serve']);
+gulp.task('default', ['build']);
 
 gulp.task('build_source', function() {
   var bundler = browserify('./src/main', {debug: !prod});

@@ -1,9 +1,9 @@
 
-@fieldSize: 640px;
-@fieldTiles: 6;
+@fieldSize: 720px;
+@fieldTiles: 8;
 @tileSize: @fieldSize / @fieldTiles;
-@menuHeight: 80px;
-@statsHeight: 160px;
+@menuHeight: 90px;
+@statsHeight: 180px;
 @gameWidth: @fieldSize;
 @gameHeight: @fieldSize + @menuHeight + @statsHeight;
 
@@ -15,7 +15,7 @@ body {
     margin: 0;
     background-color: #222;
     color: white;
-    font-size: 24px;
+    font-size: 22.5px;
     font-family: sans-serif;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -23,6 +23,7 @@ body {
 }
 
 .Game {
+    overflow: hidden;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -54,7 +55,11 @@ body {
     border-radius: @fieldSize / @tileSize * 2;
     width: @tileSize;
     height: @tileSize;
-    transition: border 0.125s;
+    color: #222;
+    font-size: 10em / @fieldTiles;
+    line-height: @tileSize;
+    text-align: center;
+    transition: border-width 0.125s, border-radius 0.25s;
     box-sizing: border-box;
 }
 
@@ -74,16 +79,8 @@ body {
     background-color: orange;
 }
 
-.Game-tile:after {
-    content: attr(data-score);
-    position: absolute;
-    top: 50%;
-    margin-top: -0.5em;
-    width: @tileSize;
-    color: #222;
-    font-size: 8em / @fieldTiles;
-    line-height: 1;
-    text-align: center;
+.Game-tile > * {
+    pointer-events: none;
 }
 
 .Game-menu,
@@ -106,7 +103,7 @@ body {
     position: relative;
     display: block;
     width: 100%;
-    font-size: 4em;
+    font-size: 4.5em;
     line-height: 2;
     text-align: center;
 }
@@ -118,7 +115,7 @@ body {
 .Game-stats label:before {
     content: "Score";
     position: absolute;
-    top: 10px;
+    top: 15px;
     left: 50%;
     margin-left: -3em;
     width: 6em;
