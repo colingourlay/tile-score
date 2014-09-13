@@ -8,6 +8,13 @@ var DIRECTIONS = {
   DOWN: 3
 };
 
+var OPPOSITES = {
+  'left': 'right',
+  'right': 'left',
+  'up': 'down',
+  'down': 'up'
+};
+
 var TILE_TYPES = {
   EARTH: 0,
   WATER: 1,
@@ -72,7 +79,11 @@ Grid.prototype.updateAppearance = function () {
     return types + tile.type;
   }, '');
 
-  if (this.lastTileTypes && tileTypes === this.lastTileTypes) {
+  var doesATileHaveDirection = this.tiles.reduce(function (bool, tile) {
+    return bool || tile.direction && tile.direction.length;
+  }, false);
+
+  if (this.lastTileTypes && tileTypes === this.lastTileTypes && !doesATileHaveDirection) {
     return;
   }
 
@@ -83,12 +94,15 @@ Grid.prototype.updateAppearance = function () {
   });
 };
 
-Grid.prototype.swap = function (a, b) {
+Grid.prototype.swap = function (a, b, direction) {
   var tempType;
 
   tempType = this.tiles[a].type;
   this.tiles[a].type = this.tiles[b].type;
   this.tiles[b].type = tempType;
+
+  this.tiles[b].direction = direction;
+  this.tiles[a].direction = OPPOSITES[direction];
 
   this.updateScore();
   --this.moves;
@@ -136,22 +150,22 @@ Grid.prototype.onDrag = function (interaction) {
   switch (direction) {
     case DIRECTIONS.UP:
       if (row > 0) {
-        grid.swap(index, index - this.fieldTiles);
+        grid.swap(index, index - this.fieldTiles, 'up');
       }
       break;
     case DIRECTIONS.DOWN:
       if (row < (grid.fieldTiles - 1)) {
-        grid.swap(index, index + this.fieldTiles);
+        grid.swap(index, index + this.fieldTiles, 'down');
       }
       break;
     case DIRECTIONS.LEFT:
       if (col > 0) {
-        grid.swap(index, index - 1);
+        grid.swap(index, index - 1, 'left');
       }
       break;
     case DIRECTIONS.RIGHT:
       if (col < (grid.fieldTiles - 1)) {
-        grid.swap(index, index + 1);
+        grid.swap(index, index + 1, 'right');
       }
       break;
     default:

@@ -1,4 +1,6 @@
 function Tile(grid, type) {
+  var tile = this;
+
   this.grid = grid;
   this.type = type;
   this.scoring = {
@@ -13,6 +15,9 @@ function Tile(grid, type) {
   };
   this.score = 0;
   this.$el = document.createElement('div');
+  prefixedEvent(this.$el, 'AnimationEnd', function () {
+    tile.$el.className = tile.$el.className.replace(/\sGame-tile--move\w+/, '');
+  });
 }
 
 Tile.prototype.updateScore = function () {
@@ -24,13 +29,13 @@ Tile.prototype.updateScore = function () {
   var last = this.grid.fieldTiles - 1;
   var type = this.type;
 
-  // Simple 4-way scoring
+  // 4-way scoring
   // this.scoring.top = row === 0 ? 0 : (type === this.grid.tiles[index - this.grid.fieldTiles].type) ? 1 : -1;
   // this.scoring.right = col === last ? 0 : (type === this.grid.tiles[index + 1].type) ? 1 : -1;
   // this.scoring.bottom = row === last ? 0 : (type === this.grid.tiles[index + this.grid.fieldTiles].type) ? 1 : -1;
   // this.scoring.left = col === 0 ? 0 : (type === this.grid.tiles[index - 1].type) ? 1 : -1;
 
-  // Simple 8-way scoring
+  // 8-way scoring
   this.scoring.top = row === 0 ? 0 : (type === this.grid.tiles[index - this.grid.fieldTiles].type) ? 2 : -1;
   this.scoring.topRight = (row === 0 || col === last) ? 0 : (type === this.grid.tiles[index - (this.grid.fieldTiles - 1)].type) ? 1 : 0;
   this.scoring.right = col === last ? 0 : (type === this.grid.tiles[index + 1].type) ? 2 : -1;
@@ -57,8 +62,11 @@ Tile.prototype.updateAppearance = function () {
 
   this.$el.className = [
     'Game-tile',
-    'Game-tile--type' + this.type
+    'Game-tile--type' + this.type,
+    this.direction ? 'Game-tile--move' + this.direction : ''
   ].join(' ');
+
+  this.direction = '';
 
   this.$el.innerHTML = this.score;
 
@@ -75,8 +83,6 @@ Tile.prototype.updateAppearance = function () {
   if (row !== 0 && this.type === this.grid.tiles[index - this.grid.fieldTiles].type) {
     this.$el.style.borderTopLeftRadius = 0;
     this.$el.style.borderTopRightRadius = 0;
-    // this.$el.style.backgroundImage = 'radial-gradient(circle 20px at -20% 50%,transparent,transparent 100px,#888888 100px)';
-    this.$el.style.backgroundImage = 'radial-gradient(circle 20px at -20% 50%,transparent,transparent 100px,#888888 100px)';
   }
 
   if (col !== 0 && this.type === this.grid.tiles[index - 1].type) {
@@ -95,5 +101,14 @@ Tile.prototype.updateAppearance = function () {
   }
 
 };
+
+var pfx = ['webkit', 'moz', 'MS', 'o', ''];
+
+function prefixedEvent(element, type, callback) {
+  for (var p = 0; p < pfx.length; p++) {
+    if (!pfx[p]) type = type.toLowerCase();
+    element.addEventListener(pfx[p] + type, callback, false);
+  }
+}
 
 module.exports = Tile;

@@ -64,6 +64,108 @@ body {
     text-align: center;
     transition: border-width 0.125s, border-radius 0.25s;
     box-sizing: border-box;
+    -webkit-animation-duration: 0.25s;
+    animation-duration: 0.25s;
+}
+
+.Game-tile--moveup {
+    -webkit-animation-name: moveup;
+    animation-name: moveup;
+}
+
+.Game-tile--movedown {
+    -webkit-animation-name: movedown;
+    animation-name: movedown;
+}
+
+.Game-tile--moveleft {
+    -webkit-animation-name: moveleft;
+    animation-name: moveleft;
+}
+
+.Game-tile--moveright {
+    -webkit-animation-name: moveright;
+    animation-name: moveright;
+}
+
+@keyframes moveup {
+    from {
+        margin-top: @tileSize;
+    }
+
+    to {
+        margin-top: 0;
+    }
+}
+
+@-webkit-keyframes moveup {
+    from {
+        margin-top: @tileSize;
+    }
+
+    to {
+        margin-top: 0;
+    }
+}
+
+@keyframes movedown {
+    from {
+        margin-top: -@tileSize;
+    }
+
+    to {
+        margin-top: 0;
+    }
+}
+
+@-webkit-keyframes movedown {
+    from {
+        margin-top: -@tileSize;
+    }
+
+    to {
+        margin-top: 0;
+    }
+}
+
+@keyframes moveleft {
+    from {
+        margin-left: @tileSize;
+    }
+
+    to {
+        margin-left: 0;
+    }
+}
+
+@-webkit-keyframes moveleft {
+    from {
+        margin-left: @tileSize;
+    }
+
+    to {
+        margin-left: 0;
+    }
+}
+
+@keyframes moveright {
+    from {
+        margin-left: -@tileSize;
+    }
+
+    to {
+        margin-left: 0;
+    }
+}
+
+@-webkit-keyframes moveright {
+    from {
+        margin-left: -@tileSize;
+    }
+
+    to {
+        margin-left: 0;
+    }
 }
 
 .Game-tile--type0 {

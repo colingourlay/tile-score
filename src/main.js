@@ -13,7 +13,6 @@ var GAME_WIDTH = FIELD_SIZE;
 var GAME_HEIGHT = FIELD_SIZE + MENU_HEIGHT + STATS_HEIGHT;
 
 var grid = new Grid(document.querySelector('.Game-grid'), FIELD_SIZE, FIELD_TILES);
-// var $stats = document.querySelector('.Game-stats');
 var $score = document.querySelector('.Game-score');
 var $moves = document.querySelector('.Game-moves');
 var lastScore;
