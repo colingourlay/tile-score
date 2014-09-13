@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "tile-score",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "My JS13KGames entry",
   "author": "Colin Gourlay <colin@colin-gourlay.com>",
   "license": "MIT",
