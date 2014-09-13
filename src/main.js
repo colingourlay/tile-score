@@ -6,7 +6,7 @@ var raf = require('./raf');
 var Grid = require('./Grid');
 
 var FIELD_SIZE = 720;
-var FIELD_TILES = 8;
+var FIELD_TILES = 4;
 var MENU_HEIGHT = 90;
 var STATS_HEIGHT = 180;
 var GAME_WIDTH = FIELD_SIZE;

@@ -10,9 +10,9 @@ var DIRECTIONS = {
 
 var TILE_TYPES = {
   EARTH: 0,
-  WIND: 1,
-  FIRE: 3,
-  WATER: 4
+  WATER: 1,
+  AIR: 2,
+  FIRE: 3
 };
 
 var NUM_TILE_TYPES = Object.keys(TILE_TYPES).length;

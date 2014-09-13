@@ -1,11 +1,16 @@
 
 @fieldSize: 720px;
-@fieldTiles: 8;
+@fieldTiles: 4;
 @tileSize: @fieldSize / @fieldTiles;
 @menuHeight: 90px;
 @statsHeight: 180px;
 @gameWidth: @fieldSize;
 @gameHeight: @fieldSize + @menuHeight + @statsHeight;
+
+@colorEarth: #2ecc71;
+@colorWater: #3498db;
+@colorAir: #ecf0f1;
+@colorFire: #e74c3c;
 
 html, body {
     height: 100%;
@@ -43,7 +48,7 @@ body {
 .Game-grid {
     position: relative;
     margin: @menuHeight auto @statsHeight;
-    border-radius: @fieldSize / @tileSize * 2;
+    border-radius: @fieldSize / @tileSize * 4.5;
     width: @fieldSize;
     height: @fieldSize;
 }
@@ -52,11 +57,11 @@ body {
     position: absolute;
     border-color: #000;
     border-style: solid;
-    border-radius: @fieldSize / @tileSize * 2;
+    // border-radius: @fieldSize / @tileSize * 4;
     width: @tileSize;
     height: @tileSize;
     color: #222;
-    font-size: 10em / @fieldTiles;
+    font-size: 8 / @fieldTiles * 2em;
     line-height: @tileSize;
     text-align: center;
     transition: border-width 0.125s, border-radius 0.25s;
@@ -64,20 +69,49 @@ body {
 }
 
 .Game-tile--type0 {
-    background-color: brown;
+    background-color: @colorEarth;
 }
 
 .Game-tile--type1 {
-    background-color: lightblue;
+    background-color: @colorWater;
 }
 
 .Game-tile--type2 {
-    background-color: white;
+    background-color: @colorAir;
 }
 
 .Game-tile--type3 {
-    background-color: orange;
+    background-color: @colorFire;
 }
+
+.Game-tile:before {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    color: rgba(0,0,0,0.05);
+    font-size: 2em;
+    margin-top: -0.5em;
+    width: 100%;
+    text-align: center;
+}
+
+.Game-tile--type0:before {
+    content: '🜃';
+}
+
+.Game-tile--type1:before {
+    content: '🜄';
+}
+
+.Game-tile--type2:before {
+    content: '🜁';
+}
+
+.Game-tile--type3:before {
+    content: '🜂';
+}
+
+
 
 .Game-tile > * {
     pointer-events: none;
