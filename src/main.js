@@ -1,6 +1,3 @@
-// var Observ = require('observ');
-// var ObservStruct = require('observ-struct');
-// var ObservArray = require('observ-array');
 var autoscale = require('./autoscale');
 var raf = require('./raf');
 var Grid = require('./Grid');
