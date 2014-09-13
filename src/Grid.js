@@ -26,6 +26,7 @@ function Grid($el, fieldSize, fieldTiles) {
   this.fieldTiles = fieldTiles;
   this.tileSize = fieldSize / fieldTiles;
   this.tiles = [];
+  this.moves = Math.floor(this.fieldTiles * this.fieldTiles);
 
   while (++i < len) {
     tile = grid.tiles[i] = new Tile(grid, Math.floor(Math.random() * NUM_TILE_TYPES));
@@ -90,6 +91,7 @@ Grid.prototype.swap = function (a, b) {
   this.tiles[b].type = tempType;
 
   this.updateScore();
+  --this.moves;
 };
 
 Grid.prototype.onDrag = function (interaction) {
@@ -98,7 +100,7 @@ Grid.prototype.onDrag = function (interaction) {
   var delta = interaction.getMoveDelta();
   var index, row, col, direction;
 
-  if (interaction.isResolved) {
+  if (interaction.isResolved || this.moves <= 0) {
     return;
   }
 
