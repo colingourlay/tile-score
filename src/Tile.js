@@ -17,6 +17,7 @@ function Tile(grid, type) {
   this.$el = document.createElement('div');
   prefixedEvent(this.$el, 'AnimationEnd', function () {
     tile.$el.className = tile.$el.className.replace(/\sGame-tile--move\w+/, '');
+    tile.$el.className = tile.$el.className.replace(/\sGame-tile--top/, '');
   });
 }
 
@@ -63,10 +64,12 @@ Tile.prototype.updateAppearance = function () {
   this.$el.className = [
     'Game-tile',
     'Game-tile--type' + this.type,
-    this.direction ? 'Game-tile--move' + this.direction : ''
+    this.direction ? 'Game-tile--move' + this.direction : '',
+    this.isDragSource ? 'Game-tile--top': '',
   ].join(' ');
 
   this.direction = '';
+  this.isDragSource = null;
 
   this.$el.innerHTML = this.score;
 

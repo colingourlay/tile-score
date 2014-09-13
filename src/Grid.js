@@ -37,14 +37,27 @@ function Grid($el, fieldSize, fieldTiles) {
 
   while (++i < len) {
     tile = grid.tiles[i] = new Tile(grid, Math.floor(Math.random() * NUM_TILE_TYPES));
+    tile.$el.style['-webkit-transform'] = 'translate(' + (grid.colOf(tile) * this.tileSize)  + 'px,' + (grid.rowOf(tile) * this.tileSize) + 'px)';
+    tile.$el.style['-moz-transform'] = 'translate(' + (grid.colOf(tile) * this.tileSize)  + 'px,' + (grid.rowOf(tile) * this.tileSize) + 'px)';
     tile.$el.style.transform = 'translate(' + (grid.colOf(tile) * this.tileSize)  + 'px,' + (grid.rowOf(tile) * this.tileSize) + 'px)';
     grid.$el.appendChild(tile.$el);
   }
 
-  interact.on('drag', grid.$el, Grid.prototype.onDrag.bind(grid));
+  this.dragHandler = Grid.prototype.onDrag.bind(grid);
+
+  interact.on('drag', this.$el, this.dragHandler);
 
   this.updateScore();
 }
+
+Grid.prototype.remove = function () {
+  var grid = this;
+  this.tiles.forEach(function (tile) {
+    grid.$el.removeChild(tile.$el);
+  });
+  this.tiles.length = 0;
+  interact.off('drag', this.$el, this.dragHandler);
+};
 
 Grid.prototype.rowOf = function (tile) {
   var index = this.tiles.indexOf(tile);
@@ -103,6 +116,8 @@ Grid.prototype.swap = function (a, b, direction) {
 
   this.tiles[b].direction = direction;
   this.tiles[a].direction = OPPOSITES[direction];
+
+  this.tiles[b].isDragSource = true;
 
   this.updateScore();
   --this.moves;

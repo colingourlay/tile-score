@@ -12,27 +12,49 @@ var STATS_HEIGHT = 180;
 var GAME_WIDTH = FIELD_SIZE;
 var GAME_HEIGHT = FIELD_SIZE + MENU_HEIGHT + STATS_HEIGHT;
 
-var grid = new Grid(document.querySelector('.Game-grid'), FIELD_SIZE, FIELD_TILES);
+var grid;
+var $game = document.querySelector('.Game');
+var $grid = document.querySelector('.Game-grid');
 var $score = document.querySelector('.Game-score');
 var $moves = document.querySelector('.Game-moves');
+var $playAgain = document.querySelector('.Game-playAgain');
+var $replay = document.querySelector('.Game-replay');
 var lastScore;
 var lastMoves;
 
+function replay() {
+  if (grid) {
+    grid.remove();
+  }
+  grid = new Grid($grid, FIELD_SIZE, FIELD_TILES);
+  lastScore = null;
+  lastMoves = null;
+  $game.className = 'Game';
+}
+
 raf.start(function () {
-  grid.updateAppearance();
+  if (grid) {
+    grid.updateAppearance();
 
-  if (grid.score !== lastScore) {
-    $score.innerHTML = grid.score;
-    $score.className = 'Game-score ' + (grid.score < 0 ? 'is-negative' : '');
-    lastScore = grid.score;
+    if (grid.score !== lastScore) {
+      $score.innerHTML = grid.score;
+      $score.className = 'Game-score ' + (grid.score < 0 ? 'is-negative' : '');
+      lastScore = grid.score;
+    }
+
+    if (grid.moves !== lastMoves) {
+      $moves.innerHTML = grid.moves;
+      $moves.className = 'Game-moves ' + (grid.moves < 0 ? 'is-negative' : '') + (grid.moves < 6 ? 'is-low' : '');
+      lastMoves = grid.moves;
+    }
+
+    if (grid.moves <= 0) {
+      $game.className = 'Game Game--over';
+    }
   }
-
-  if (grid.moves !== lastMoves) {
-    $moves.innerHTML = grid.moves;
-    $moves.className = 'Game-score ' + (grid.moves < 0 ? 'is-negative' : '');
-    lastMoves = grid.moves;
-  }
-
 });
 
 autoscale('.Game', GAME_WIDTH, GAME_HEIGHT);
+replay();
+$playAgain.onclick = replay;
+$replay.onclick = replay;
