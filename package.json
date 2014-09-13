@@ -1,11 +1,11 @@
 {
   "private": true,
-  "name": "garden",
+  "name": "tile-score",
   "version": "0.0.0",
   "description": "My JS13KGames entry",
   "author": "Colin Gourlay <colin@colin-gourlay.com>",
   "license": "MIT",
-  "repository": "colingourlay/garden",
+  "repository": "colingourlay/tile-score",
   "devDependencies": {
     "browserify": "^5.10.0",
     "bundle-collapser": "^1.1.0",
