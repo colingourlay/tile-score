@@ -12,13 +12,6 @@
 @colorAir: #ecf0f1;
 @colorFire: #e74c3c;
 
-::-moz-selection {
-    background-color: transparent;
-}
-::selection {
-    background-color: transparent;
-}
-
 html, body {
     height: 100%;
 }
@@ -30,11 +23,14 @@ body {
     font-size: 22.5px;
     font-weight: 200;
     font-family: sans-serif;
+    -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    -webkit-user-drag: none;
+    user-drag: none;
 }
 
 .Game {
@@ -267,6 +263,15 @@ body {
 //     content: '🜂';
 // }
 
+.Game-tile:after {
+    content: attr(data-score);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    margin-top: -1em;
+    width: 100%;
+    text-align: center;
+}
 
 .Game-tile > * {
     pointer-events: none;

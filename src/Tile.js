@@ -65,13 +65,14 @@ Tile.prototype.updateAppearance = function () {
     'Game-tile',
     'Game-tile--type' + this.type,
     this.direction ? 'Game-tile--move' + this.direction : '',
-    this.isDragSource ? 'Game-tile--top': '',
+    this.isDragSource ? 'Game-tile--top' : '',
   ].join(' ');
 
   this.direction = '';
   this.isDragSource = null;
 
-  this.$el.innerHTML = this.score;
+  // this.$el.innerHTML = this.score;
+  this.$el.setAttribute('data-score', this.score);
 
   this.$el.style.borderTopWidth = row === 0 || this.scoring.top < 0 ? borderSizePx : 0;
   this.$el.style.borderRightWidth = col === last || this.scoring.right < 0 ? borderSizePx : 0;
